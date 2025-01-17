@@ -89,12 +89,12 @@ class SSLExampleEnv(SSLBaseEnv):
         for i in range(0, self.n_robots_yellow):
             obstacles[i + self.n_robots_blue] = self.frame.robots_yellow[i]
         teammates = {id: self.frame.robots_blue[id] for id in self.my_agents.keys()}
-
+        teammates_agents = {id: self.my_agents[id] for id in self.my_agents.keys()}
         remove_self = lambda robots, selfId: {id: robot for id, robot in robots.items() if id != selfId}
 
         myActions = []
         for i in self.my_agents.keys():
-            action = self.my_agents[i].step(self.frame.robots_blue[i], remove_self(obstacles, i), teammates, self.targets)
+            action = self.my_agents[i].step(self.frame.robots_blue[i], remove_self(obstacles, i), teammates, teammates_agents, self.targets)
             myActions.append(action)
 
         others_actions = []
