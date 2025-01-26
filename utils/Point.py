@@ -1,5 +1,6 @@
 import math
 from typing import NamedTuple
+from utils.Vector import Vector
 
 class Point(NamedTuple):
     x: float
@@ -34,3 +35,7 @@ class Point(NamedTuple):
     
     def normalize(self):
         return self / self.length()
+    
+    def direction_to(self, other) -> Vector:
+        sub_points = other - self
+        return Vector(*sub_points).normalize()
