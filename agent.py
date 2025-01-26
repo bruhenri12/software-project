@@ -46,16 +46,12 @@ class ExampleAgent(BaseAgent):
             Point: The closest possible target to this agent
         """
 
-        if len(self.targets) == 1:
-            return target
-
-        # Check if another teammate focusing the same target is closer
+        # Check if another teammate is focusing the same target
         teammates_with_same_target = [
             teammate_agent for teammate_agent in self.teammates_agents.values()
             if teammate_agent.target != None and teammate_agent.target == target
         ]
 
-        #print(len(teammates_with_same_target))
         if len(teammates_with_same_target) == 0:
             return target
         
@@ -63,6 +59,8 @@ class ExampleAgent(BaseAgent):
 
         # If there is a teammate closer to the target, this agent will focus on another target
         if closer_teammate.pos.dist_to(target) < self.pos.dist_to(target):
+            if (len(self.targets) == 1):
+                return self.pos
             # If there is no other target, this agent will focus on the next closest target
             self.targets.remove(target)
             return self.set_target(self.closest_target())
