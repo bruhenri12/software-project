@@ -10,10 +10,10 @@ from agent import ExampleAgent
 from random_agent import RandomAgent
 import random
 import pygame
-from utils.CLI import Difficulty
+from utils.CLI import Difficulty, ToggleRaycasts
 
 class SSLExampleEnv(SSLBaseEnv):
-    def __init__(self, render_mode="human", difficulty=Difficulty.EASY):
+    def __init__(self, render_mode="human", difficulty=Difficulty.EASY, raycasts=ToggleRaycasts.HIDE):
         field = 2   # 1: SSL Div B    2: SSL Software challenge
         super().__init__(
             field_type=field, 
@@ -23,6 +23,7 @@ class SSLExampleEnv(SSLBaseEnv):
             render_mode=render_mode)
         
         self.DYNAMIC_OBSTACLES, self.max_targets, self.max_rounds = Difficulty.parse(difficulty)
+        self.toggle_raycasts = ToggleRaycasts.parse(raycasts)
 
         n_obs = 4 # Ball x,y and Robot x, y
         self.action_space = Box(low=-1, high=1, shape=(2, ))
@@ -187,6 +188,11 @@ class SSLExampleEnv(SSLBaseEnv):
                 my_path = [pos_transform(*p) for p in self.robots_paths[i]]
                 pygame.draw.lines(self.window_surface, (255, 0, 0), False, my_path, 1)
 
+        if self.toggle_raycasts:
+            for agent in self.my_agents.values():
+                if agent.target is not None:
+                    pygame.draw.line(self.window_surface, (0, 255, 0), pos_transform(*agent.pos), pos_transform(*agent.target))
+        
     def draw_target(self, screen, transformer, point, color):
         x, y = transformer(point.x, point.y)
         size = 0.09 * self.field_renderer.scale

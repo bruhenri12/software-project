@@ -1,7 +1,7 @@
 import gymnasium as gym
 import rsoccer_gym
 from gymnasium.envs.registration import register
-from utils.CLI import cli, Difficulty
+from utils.CLI import cli, Difficulty, ToggleRaycasts
 import pygame
 
 args = cli()
@@ -16,7 +16,7 @@ register(
     entry_point="sslenv:SSLExampleEnv"
 )
 
-env = gym.make("SSL-Project", difficulty=Difficulty(args.difficulty))
+env = gym.make("SSL-Project", difficulty=Difficulty(args.difficulty), raycasts=ToggleRaycasts(args.raycasts))
 
 env.reset()
 

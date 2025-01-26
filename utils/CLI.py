@@ -19,6 +19,16 @@ class Difficulty(Enum):
         if difficulty == Difficulty.VERY_HARD:
             return True, 6, 2
 
+class ToggleRaycasts(Enum):
+    HIDE = 0
+    SHOW = 1
+
+    @staticmethod
+    def parse(raycasts):
+        if raycasts == ToggleRaycasts.HIDE:
+            return False
+        if raycasts == ToggleRaycasts.SHOW:
+            return True
 
 def cli():
     parser = argparse.ArgumentParser(
@@ -30,6 +40,10 @@ def cli():
             2 - Medium: Dynamic obstacles, single robot, and 10 targets generated successively.
             3 - Hard: Dynamic obstacles, robot-to-target assignment increasing successively up to 4, followed by 10 generations of targets after reaching 4 robots.
             4 - Very Hard: Dynamic obstacles, robot-to-target assignment increasing successively up to 6, followed by 10 generations of targets after reaching 6 robots.
+        
+        Toggle raycasts:
+            0 - Hide raycasts.
+            1 - Show raycasts.
         """))
     
     parser.add_argument(
@@ -38,5 +52,12 @@ def cli():
         type=int, 
         default=1, 
         help='Difficulties: 1, 2, 3 or 4 / Default = 1')
+    
+    parser.add_argument(
+        '-r', 
+        '--raycasts', 
+        type=int, 
+        default=0, 
+        help='Toggle Raycasts: 0 or 1 / Default = 0')
 
     return parser.parse_args()
